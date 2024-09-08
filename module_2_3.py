@@ -6,13 +6,13 @@ i = 0
 
 while i < len(my_list):
 
-if my_list[i] < 0:
+  if my_list[i] < 0:
 
-break
+    break
 
-if my_list[i] > 0:
+  if my_list[i] > 0:
 
-print(my_list[i])
+  print(my_list[i])
 
-i += 1
+  i += 1
 

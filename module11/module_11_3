@@ -1,0 +1,23 @@
+def introspection_info(obj):
+
+    info = {}
+
+    info['type'] = type(obj)
+
+    info['attributes'] = dir(obj)
+
+    methods = [method for method in dir(obj) if callable(getattr(obj, method))]
+    info['methods'] = methods
+
+    info['module'] = getattr(obj, '__module__', None)
+
+    if isinstance(obj, (list, tuple, set, dict)):
+        info['length'] = len(obj)
+    elif isinstance(obj, str):
+        info['length'] = len(obj)
+        info['isupper'] = obj.isupper()
+        info['islower'] = obj.islower()
+    elif hasattr(obj, '__doc__'):
+        info['docstring'] = obj.__doc__
+
+    return info

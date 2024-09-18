@@ -1,22 +1,30 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils import executor
+from aiogram.types import Message
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Text
 
-TOKEN = "TOKEN"
+# Замените токен на свой
+API_TOKEN = "YOUR_TOKEN_HERE"
 
-def start(update, context):
-    print("Привет! Я бот помогающий твоему здоровью.")
-    update.message.reply_text("Привет! Я бот помогающий твоему здоровью.")
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
 
-def all_massages(update, context):
-    print("Введите команду /start, чтобы начать общение.")
-    update.message.reply_text("Введите команду /start, чтобы начать общение.")
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    """
+    Печатает приветственное сообщение при команде /start.
+    """
+    await message.answer("Привет! Я бот помогающий твоему здоровью.")
+    print("Пользователь начал общение.")
 
-updater = Updater(TOKEN, use_context=True)
+@dp.message_handler()
+async def all_messages(message: types.Message):
+    """
+    Печатает сообщение о необходимости ввести /start при любом другом сообщении.
+    """
+    await message.answer("Введите команду /start, чтобы начать общение.")
+    print("Пользователь ввёл:", message.text)
 
-dispatcher = updater.dispatcher
-
-dispatcher.add_handler(CommandHandler("start", start))
-
-dispatcher.add_handler(MessageHandler(Filters.all, all_massages))
-
-updater.start_polling()
-updater.idle()
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)

@@ -4,7 +4,6 @@ from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 
-# Замените токен на свой
 API_TOKEN = "YOUR_TOKEN_HERE"
 
 bot = Bot(token=API_TOKEN)

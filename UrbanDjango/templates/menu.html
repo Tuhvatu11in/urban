@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block pagename %}{% endblock %}</title>
+</head>
+<body>
+  <header>
+    {% block menu %}
+      <nav>
+        <ul>
+          <li><a href="/#" style="font-size: 5vh; display: block">Главная</a></li>
+          <li><a href="/shop/" style="font-size: 5vh; display: block">Магазин</a></li>
+          <li><a href="/bill/" style="font-size: 5vh; display: block">Корзина</a></li>
+          </ul>
+      </nav>
+    {% endblock %}
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
+

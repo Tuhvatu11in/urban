@@ -1,12 +1,13 @@
 {% extends "menu.html" %}
 
 {% block pagename %}Магазин игр{% endblock %}
-
+{% block l %}Магазин{% endblock %}
 {% block content %}
   <h1>Доступные игры:</h1>
   <ul>
     {% for game in games %}
-      <li>{{ game }}</li>
+      <li>{{ game }} || {{ game.description }} ||{{ game.cost}}</li>
+    <button>Купить</button>
     {% endfor %}
   </ul>
 {% endblock %}

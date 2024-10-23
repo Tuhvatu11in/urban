@@ -21,7 +21,7 @@ from task1 import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.sign_up_by_html),
-    path('main', views.main),
+    path('main/', views.main),
     path('shop/', views.shop),
     path('bill/', views.bill),
 ]

@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User Details</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users List</title>
 </head>
 <body>
-    <h1>Информация о пользователе</h1>
-    <p>Имя: {{ user.username }}</p>
-    <p>Возраст: {{ user.age }}</p>
+  <h1>Users</h1>
+  <ul>
+    {% if users %}
+      {% for user in users %}
+        <li><a href="/user/{{ user.id }}">{{ user.username }} ({{ user.age }})</a></li>
+      {% endfor %}
+    {% else %}
+      <li>No users found.</li>
+    {% endif %}
+  </ul>
+
+  {% if user %}
+    <h2>User Details</h2>
+    <p>ID: {{ user.id }}</p>
+    <p>Username: {{ user.username }}</p>
+    <p>Age: {{ user.age }}</p>
+  {% endif %}
 </body>
 </html>
-

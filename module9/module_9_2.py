@@ -1,22 +1,23 @@
 first_strings = ['Elon', 'Musk', 'Programmer', 'Monitors', 'Variable']
 second_strings = ['Task', 'Git', 'Comprehension', 'Java', 'Computer', 'Assembler']
 
-# Задание 1
+# Создание first_result
 first_result = [len(string) for string in first_strings if len(string) >= 5]
 
-# Задание 2
+# Создание second_result
 second_result = []
-for string1 in first_strings:
-    for string2 in second_strings:
-        if len(string1) == len(string2):
-            second_result.append((string1, string2))
+for first_string in first_strings:
+ for second_string in second_strings:
+  if len(first_string) == len(second_string):
+   second_result.append((first_string, second_string))
 
-# Задание 3
+# Создание third_result
 third_result = {}
 for string in first_strings + second_strings:
-    if len(string) % 2 == 0:
-        third_result[string] = len(string)
+ if len(string) % 2 == 0:
+  third_result[string] = len(string)
 
+# Вывод результатов
 print(f"first_result: {first_result}")
 print(f"second_result: {second_result}")
 print(f"third_result: {third_result}")

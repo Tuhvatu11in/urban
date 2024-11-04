@@ -54,13 +54,9 @@ async def task_by_id(task_id: int, db: Annotated[Session, Depends(get_db)]):
 @router.post('/create')
 async def create_task(task: CreateTask, db: Annotated[Session, Depends(get_db)]):
     """Создает нового пользователя."""
-    logging.log(20, "Он хотя бы запускается")
-    try:
-        db.execute(insert(Task).values(title=task.title,
+    db.execute(insert(Task).values(title=task.title,
                                         content=task.content,
                                         priority=task.priority))
-    except:
-        logging.log(20, "полный пиздец")
     db.commit()
     return {'status_code': status.HTTP_201_CREATED,
             'transaction': 'Successful'}

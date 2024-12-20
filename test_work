@@ -1,0 +1,132 @@
+import os
+import csv
+import re
+from typing import List, Dict, Tuple
+
+
+class PriceAnalyzer:
+    def __init__(self, directory: str):
+        self.directory = directory
+        self.data = []
+
+    def load_prices(self) -> None:
+        for filename in os.listdir(self.directory):
+            if "price" in filename.lower():
+                filepath = os.path.join(self.directory, filename)
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as csvfile:
+                        reader = csv.DictReader(csvfile)
+                        for row in reader:
+                            name_fields = ["название", "продукт", "товар", "наименование"]
+                            price_fields = ["цена", "розница"]
+                            weight_fields = ["фасовка", "масса", "вес"]
+
+                            name = next((row[field] for field in name_fields if field in row), None)
+                            price = next((float(row[field]) for field in price_fields if field in row and row[field]),
+                                         None)
+                            weight = next((float(row[field]) for field in weight_fields if field in row and row[field]),
+                                          None)
+
+                            if name and price and weight:
+                                self.data.append({
+                                    "name": name,
+                                    "price": price,
+                                    "weight": weight,
+                                    "filename": filename
+                                })
+                except Exception as e:
+                    print(f"Ошибка при обработке файла {filename}: {e}")
+
+    def find_text(self, search_text: str) -> List[Dict]:
+        results = []
+        for item in self.data:
+            if search_text.lower() in item["name"].lower():
+                item['price_per_kg'] = item['price'] / item['weight']
+                results.append(item)
+        results.sort(key=lambda x: x['price_per_kg'])
+        return results
+
+    def export_to_html(self, filename: str) -> None:
+        with open(filename, 'w', encoding='utf-8') as htmlfile:
+            htmlfile.write("""<!DOCTYPE html>
+<html>
+<head>
+<title>Прайс-лист</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>Объединенный прайс-лист</h2>
+
+<table>
+  <tr>
+    <th>№</th>
+    <th>Наименование</th>
+    <th>Цена</th>
+    <th>Вес</th>
+    <th>Файл</th>
+    <th>Цена за кг</th>
+  </tr>""")
+
+            for i, item in enumerate(self.data):
+                htmlfile.write(f"""
+  <tr>
+    <td>{i + 1}</td>
+    <td>{item['name']}</td>
+    <td>{item['price']}</td>
+    <td>{item['weight']}</td>
+    <td>{item['filename']}</td>
+    <td>{item['price'] / item['weight']}</td>
+  </tr>""")
+
+            htmlfile.write("""
+</table>
+
+</body>
+</html>""")
+
+    def print_table(self, data: List[Dict]) -> None:
+        if not data:
+            print("Товары не найдены.")
+            return
+
+        print("№tНаименованиеttЦенаtВесtФайлtЦена за кг.")
+        for i, item in enumerate(data):
+            print(
+                f"{i + 1}t{item['name'][:25]:<25}t{item['price']}t{item['weight']}t{item['filename']}t{item['price_per_kg']:.1f}")
+
+
+def main():
+    analyzer = PriceAnalyzer("price_files")  # Замените на путь к вашей папке
+    analyzer.load_prices()
+
+    while True:
+        search_text = input("Введите текст для поиска (или 'exit' для выхода): ")
+        if search_text.lower() == "exit":
+            print("Работа закончена.")
+            break
+
+        results = analyzer.find_text(search_text)
+        analyzer.print_table(results)
+
+    analyzer.export_to_html("price_list.html")
+
+
+if __name__ == "__main__":
+    main()
